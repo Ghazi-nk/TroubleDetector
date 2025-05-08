@@ -1,0 +1,6 @@
+create_file:
+  image: alpine:latest
+  script:
+      - echo "Creating a file..."
+      - touch myfile.txt
+      - echo "File created successfully."

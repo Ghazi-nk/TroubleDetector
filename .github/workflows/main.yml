@@ -21,3 +21,10 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}  # Use the GitHub username (actor)
           password: ${{ secrets.GHCR_TOKEN }}  # Use the secret token
+
+      # Build the Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t ghcr.io/$USER/troubledetector:latest .
+          
+      

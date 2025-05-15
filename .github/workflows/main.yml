@@ -1,0 +1,23 @@
+name: Docker Image Scan
+
+on: [push]
+
+env:
+  USER: "ghazi-nk"
+
+jobs:
+  trivy_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Login to GitHub Container Registry
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}  # Use the GitHub username (actor)
+          password: ${{ secrets.GHCR_TOKEN }}  # Use the secret token

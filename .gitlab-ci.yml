@@ -1,6 +1,17 @@
-create_file:
-  image: alpine:latest
+stages:
+  - analyze
+
+analyze:
+  stage: analyze
+  tags:
+    - sonar  # Make sure it matches your runner
+  image: sonarsource/sonar-scanner-cli
+  variables:
+    SONAR_HOST_URL: "http://host.docker.internal:9000"  # works for Docker on Mac/Windows
+    SONAR_TOKEN: "$SONAR_TOKEN"
   script:
-      - echo "Creating a file..."
-      - touch myfile.txt
-      - echo "File created successfully."
+    - sonar-scanner \
+        -Dsonar.projectKey=test-project \
+        -Dsonar.sources=. \
+        -Dsonar.host.url=$SONAR_HOST_URL \
+        -Dsonar.login=$SONAR_TOKEN

@@ -36,3 +36,20 @@ helm install --generate-name -f values.yaml gitlab/gitlab-runner
 
 5. **User Notification**
    - The **Telegram Bot** receives the summary and sends it back to the user.
+
+#### notes:
+- min. 1 pod in argocd muss zu sehen sein (greift auf local kubernetes cluster)
+- wechsel auf github workflows
+- telegram muss humorvolle message erhalten
+- renovate integration! (github) 
+- funktionsfähige pipeline (gitlab ci) und pods (argocd)
+#### Präsentation:
+- Krankheit -> 
+  - 2. Prüfungszeitraum
+  - einfach machen!
+- Produkt pitch (5 min)
+- Code Review (5 min)
+  - Argocd
+  - kubernetes
+  - gitlab ci
+- 

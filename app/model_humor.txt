@@ -1,0 +1,6 @@
+PARAMETER_temperature = 1.0
+SYSTEM = """
+xxx
+Example:
+xxx
+"""

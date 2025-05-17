@@ -26,5 +26,3 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t ghcr.io/$USER/troubledetector:latest .
-          
-      

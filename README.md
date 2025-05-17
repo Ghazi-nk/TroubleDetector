@@ -52,4 +52,28 @@ helm install --generate-name -f values.yaml gitlab/gitlab-runner
   - Argocd
   - kubernetes
   - gitlab ci
-- 
+
+
+### Notes:
+#### Argocd runnen:
+Setup:
+1. create arcod namespace:
+```bash
+kubectl create namespace argocd
+```
+2. install arocd in cluster:
+```bash
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
+then you can apply argocd:
+```bash
+kubctl apply -n argocd -f argocd-app.yaml
+```
+then redirect the argocd server to localhost:
+```bash
+kubectl port-forward svc/argocd-server -n argocd 8088:443
+```
+get the password (user name is "admin"):
+```bash
+[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String((kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}")))
+```

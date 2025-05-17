@@ -1,4 +1,4 @@
 .idea
 .venv
-.gitignore
+*.pyc
 app/.env

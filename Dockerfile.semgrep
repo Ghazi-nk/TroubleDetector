@@ -1,6 +1,6 @@
 FROM ghcr.io/ghazi-nk/troubledetector:latest
 
 # Add the Semgrep report to the image
-COPY report.json /app/report.json
+COPY report.json app/semgrep-service/reports/report.json
 
 CMD ["python", "main.py"]

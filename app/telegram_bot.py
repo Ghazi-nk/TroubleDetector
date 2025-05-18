@@ -10,7 +10,9 @@ from dotenv import load_dotenv
 from telebot import types
 from telegram.constants import ParseMode
 
-from app.main import handle_repo_name
+from app.github_client import retrieve_repo
+from app.openai_client import get_openai_client, get_response
+from app.semgrep_client import get_semgrep_report
 
 # Load environment variables from .env
 load_dotenv(".env")
@@ -24,7 +26,7 @@ bot = telebot.TeleBot(BOT_TOKEN)
 
 bot.set_my_commands([
     types.BotCommand("start", "Start the bot"),
-    types.BotCommand("GithubRepo", "Submit a GitHub repository name")
+    types.BotCommand("githubrepo", "Submit a GitHub repository name")
 ])
 
 logging.basicConfig(level=logging.INFO)
@@ -77,6 +79,25 @@ def start_polling():
         except Exception as e:
             logging.error(f"Polling error: {e}")
             time.sleep(5)
+
+
+def handle_repo_name(repo_name, chat_id):
+    """
+    Handle the GitHub repository name.
+    This function should implement the logic to use the repo name.
+    """
+    # Implement your logic here
+    logging.info(f"Handling repository name: {repo_name}")
+    # retrieve repos from github
+    retrieve_repo(repo_name)
+    # use semgrep to analyze the repo and generate a report
+    semgrep_report_str = get_semgrep_report()
+    # create a output out of the report using openai
+    client, model = get_openai_client()
+    response = get_response(semgrep_report_str, client, model)
+    # send the output to the user
+    send_message(chat_id, response)
+    logging.info(f"Response sent to user: {response}")
 
 
 

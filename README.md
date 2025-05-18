@@ -67,7 +67,7 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 ```
 then you can apply argocd:
 ```bash
-kubctl apply -n argocd -f argocd-app.yaml
+kubectl apply -n argocd -f argocd-app.yaml
 ```
 then redirect the argocd server to localhost:
 ```bash

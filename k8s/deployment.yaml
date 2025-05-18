@@ -17,5 +17,8 @@ spec:
         - name: troubledetector
           image: ghcr.io/ghazi-nk/troubledetector-with-semgrep:latest
           command: ["/bin/bash", "-c", "while true; do sleep 3600; done"]
+          envFrom:
+            - secretRef:
+                name: troubledetector-secret
       imagePullSecrets:
         - name: ghcr-secret  # Das ImagePullSecret, das du vorher erstellt hast

@@ -18,3 +18,5 @@ app/.env
 # System files
 .DS_Store
 Thumbs.db
+
+k8s/troubledetector-secret.yaml

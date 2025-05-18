@@ -4,7 +4,7 @@ metadata:
   name: troubledetector-service
 spec:
   selector:
-    app: troubledetector
+    app: troubledetector-app
   ports:
     - protocol: TCP
       port: 7861

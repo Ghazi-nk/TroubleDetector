@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout your source code
+      # Step 1: Checkout the repository code
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -22,12 +22,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_TOKEN }}
 
-      # Step 3: Build your base Docker image from your main Dockerfile
+      # Step 3: Build the base Docker image
       - name: Build base Docker image
         run: |
           docker build -t ghcr.io/$USER/troubledetector:latest .
 
-      # Step 4: Run Semgrep scan in a container, mount your code and save output as JSON
+      # Step 4: Run Semgrep scan and output report.json
       - name: Run Semgrep scan
         run: |
           docker run --rm \
@@ -36,15 +36,15 @@ jobs:
             -e SEMGREP_APP_TOKEN=${{ secrets.SEMGREP_APP_TOKEN }} \
             semgrep/semgrep semgrep ci --json --output /output/report.json
 
-      # Step 5: Copy Semgrep report into working directory (for Docker COPY)
+      # Step 5: Copy Semgrep report to the workspace
       - name: Prepare Semgrep report
         run: cp semgrep_output/report.json .
 
-      # Step 6: Build a new image that includes the Semgrep report
-      - name: Build final image with report.json
+      # Step 6: Build the final Docker image including report.json
+      - name: Build final image with Semgrep report
         run: |
           docker build -t ghcr.io/$USER/troubledetector-with-semgrep:latest -f Dockerfile.semgrep .
 
-      # Step 7: Push the final image to GitHub Container Registry
+      # Step 7: Push the final image to GHCR
       - name: Push final image
         run: docker push ghcr.io/$USER/troubledetector-with-semgrep:latest

@@ -1,6 +1,6 @@
 # Dockerfile.semgrep
 
-FROM ghcr.io/ghazi-nk/troubledetector:latest
+FROM ghcr.io/ghazi-nk/troubledetector-with-semgrep:latest
 
 # Add Semgrep report to the image
 COPY report.json /app/report.json

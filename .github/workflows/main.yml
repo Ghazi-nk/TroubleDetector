@@ -25,7 +25,7 @@ jobs:
       # Step 3: Build your base Docker image from your main Dockerfile
       - name: Build base Docker image
         run: |
-          docker build -t ghcr.io/$USER/heybot:latest .
+          docker build -t ghcr.io/$USER/troubledetector:latest .
 
       # Step 4: Run Semgrep scan in a container, mount your code and save output as JSON
       - name: Run Semgrep scan
@@ -43,8 +43,8 @@ jobs:
       # Step 6: Build a new image that includes the Semgrep report
       - name: Build final image with report.json
         run: |
-          docker build -t ghcr.io/$USER/heybot-with-semgrep:latest -f Dockerfile.semgrep .
+          docker build -t ghcr.io/$USER/troubledetector-with-semgrep:latest -f Dockerfile.semgrep .
 
       # Step 7: Push the final image to GitHub Container Registry
       - name: Push final image
-        run: docker push ghcr.io/$USER/heybot-with-semgrep:latest
+        run: docker push ghcr.io/$USER/troubledetector-with-semgrep:latest

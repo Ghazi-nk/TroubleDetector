@@ -1,6 +1,20 @@
-.idea
-.venv
+# IDE and editor folders
+.idea/
+.vscode/
+
+# Python virtual environments
+.venv/
+venv/
+
+# Python bytecode files
 *.pyc
-app/.env
-# .gitignore
+__pycache__/
+
+# Environment files
+.env
 *.env
+app/.env
+
+# System files
+.DS_Store
+Thumbs.db

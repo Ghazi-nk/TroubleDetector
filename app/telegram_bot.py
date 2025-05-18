@@ -10,9 +10,9 @@ from dotenv import load_dotenv
 from telebot import types
 from telegram.constants import ParseMode
 
-from app.github_client import retrieve_repo
-from app.openai_client import get_openai_client, get_response
-from app.semgrep_client import get_semgrep_report
+from github_client import retrieve_repo
+from openai_client import get_openai_client, get_response
+from semgrep_client import get_semgrep_report
 
 # Load environment variables from .env
 load_dotenv(".env")

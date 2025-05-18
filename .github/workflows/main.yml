@@ -1,51 +1,50 @@
-name: CI - Docker Build and Semgrep Scan
+name: Docker Build and Semgrep Scan
 
-on:
-  push:
-    branches:
-      - main
-      - master
-  pull_request: {}
-  workflow_dispatch: {}
-  schedule:
-    - cron: '12 15 * * *'  # random time to avoid GitHub load spikes
+on: [push]
 
 env:
   USER: "ghazi-nk"
 
 jobs:
-  docker-build:
-    name: Docker Image Build
+  docker-semgrep:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout your source code
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Login to GitHub Container Registry
+      # Step 2: Login to GitHub Container Registry (GHCR)
+      - name: Login to GHCR
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_TOKEN }}
 
-      - name: Build Docker image
+      # Step 3: Build your base Docker image from your main Dockerfile
+      - name: Build base Docker image
         run: |
-          docker build -t ghcr.io/$USER/troubledetector:latest .
+          docker build -t ghcr.io/$USER/heybot:latest .
 
-  semgrep:
-    name: Semgrep Scan
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    env:
-      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-    container:
-      image: semgrep/semgrep
-    if: github.actor != 'dependabot[bot]'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      # Step 4: Run Semgrep scan in a container, mount your code and save output as JSON
+      - name: Run Semgrep scan
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}:/src" \
+            -v "${{ github.workspace }}/semgrep_output:/output" \
+            -e SEMGREP_APP_TOKEN=${{ secrets.SEMGREP_APP_TOKEN }} \
+            semgrep/semgrep semgrep ci --json --output /output/report.json
 
-      - name: Run Semgrep
-        run: semgrep ci
+      # Step 5: Copy Semgrep report into working directory (for Docker COPY)
+      - name: Prepare Semgrep report
+        run: cp semgrep_output/report.json .
+
+      # Step 6: Build a new image that includes the Semgrep report
+      - name: Build final image with report.json
+        run: |
+          docker build -t ghcr.io/$USER/heybot-with-semgrep:latest -f Dockerfile.semgrep .
+
+      # Step 7: Push the final image to GitHub Container Registry
+      - name: Push final image
+        run: docker push ghcr.io/$USER/heybot-with-semgrep:latest

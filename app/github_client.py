@@ -5,7 +5,7 @@ import load_dotenv
 # ======== CONFIGURATION ========
 
 load_dotenv.load_dotenv()  # Load environment variables from .env file
-repo_full_name = "ghazi-nk/heybot"  # Format: owner/repo
+#repo_full_name = "ghazi-nk/heybot"  # Format: owner/repo
 api_token = os.getenv("GITHUB_PAT")
 destination_folder = Path("project")  # Folder to save files
 
@@ -38,7 +38,7 @@ def download_and_save_file(repo_full_name, branch, file_path, headers):
     print(f"✓ Saved: {file_path}")
 
 
-def run():
+def retrieve_repo(repo_full_name):
     headers = {"Authorization": f"token {api_token}"} if api_token else {}
     print(f"📦 Cloning {repo_full_name} into '{destination_folder}'")
 
@@ -56,4 +56,4 @@ def run():
 
 # Run the script
 if __name__ == "__main__":
-    run()
+    retrieve_repo("ghazi-nk/heybot")

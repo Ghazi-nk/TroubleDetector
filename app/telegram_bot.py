@@ -6,7 +6,11 @@ import time
 import telebot
 from dotenv import load_dotenv
 
+# Suggest commands (users see this when typing '/')
+from telebot import types
+from telegram.constants import ParseMode
 
+from app.main import handle_repo_name
 
 # Load environment variables from .env
 load_dotenv(".env")
@@ -18,6 +22,10 @@ if not BOT_TOKEN:
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
+bot.set_my_commands([
+    types.BotCommand("start", "Start the bot"),
+    types.BotCommand("GithubRepo", "Submit a GitHub repository name")
+])
 
 logging.basicConfig(level=logging.INFO)
 
@@ -34,6 +42,22 @@ def escape_characters(text, characters_to_escape):
 def send_welcome(message):
     bot.send_message(message.chat.id, "Welcome! Send me a prompt followed by your sonar report.")
 
+@bot.message_handler(commands=['GithubRepo'])
+def github_repo_handler(message):
+    msg = bot.send_message(
+        message.chat.id,
+        "Please enter the full GitHub repository name (e.g., `owner/repo`):",
+        parse_mode=ParseMode.MARKDOWN
+    )
+
+    bot.register_next_step_handler(msg, lambda msg2: (
+        bot.send_message(msg2.chat.id, "❌ Invalid format. Please use `owner/repo` format.")
+        if '/' not in msg2.text.strip() or len(msg2.text.strip().split('/')) != 2
+        else (
+            bot.send_message(msg2.chat.id, f"✅ Repository name received: `{msg2.text.strip()}`", parse_mode=ParseMode.MARKDOWN),
+            handle_repo_name(msg2.text.strip(), msg2.chat.id)
+        )
+    ))
 
 
 def send_message(chat_id, response):

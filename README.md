@@ -77,3 +77,4 @@ get the password (user name is "admin"):
 ```bash
 [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String((kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}")))
 ```
+test

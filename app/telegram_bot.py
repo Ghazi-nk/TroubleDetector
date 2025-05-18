@@ -5,7 +5,6 @@ import time
 
 import telebot
 from dotenv import load_dotenv
-from telegram.constants import ParseMode
 
 
 
@@ -13,12 +12,9 @@ from telegram.constants import ParseMode
 load_dotenv(".env")
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 if not BOT_TOKEN:
     raise ValueError("BOT_TOKEN is missing from environment.")
-if not OPENAI_API_KEY:
-    raise ValueError("OPENAI_API_KEY is missing from environment.")
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
@@ -38,29 +34,17 @@ def escape_characters(text, characters_to_escape):
 def send_welcome(message):
     bot.send_message(message.chat.id, "Welcome! Send me a prompt followed by your sonar report.")
 
-@bot.message_handler(func=lambda msg: True)
-def handle_message(message):
-    user_input = message.text.strip()
-    chat_id = message.chat.id
 
-    # For demo purposes, assume split by a line break into prompt and sonar_report
-    if "\n" not in user_input:
-        bot.send_message(chat_id, "Please provide input in the format:\n<Prompt>\\n<Your Sonar Report>")
-        return
 
+def send_message(chat_id, response):
+    """
+    Send a message to the Telegram bot.
+    """
     try:
-        prompt, sonar_report = user_input.split("\n", 1)
-        bot.send_message(chat_id, "Thinking...")
-        response = "static response"
-
-        # Escape characters for Telegram MarkdownV2
-        characters_to_escape = '_>~`#+-=|{}.!'
-        safe_text = escape_characters(response, characters_to_escape)
-
-        bot.send_message(chat_id, safe_text, parse_mode=ParseMode.MARKDOWN_V2)
+        bot.send_message(chat_id, response)
     except Exception as e:
-        logging.error(f"Error handling message: {e}")
-        bot.send_message(chat_id, "Something went wrong while processing your request.")
+        logging.error(f"Error sending message to Telegram: {e}")
+        raise
 
 def start_polling():
     while True:
@@ -70,10 +54,11 @@ def start_polling():
             logging.error(f"Polling error: {e}")
             time.sleep(5)
 
+
+
 if __name__ == "__main__":
     thread = threading.Thread(target=start_polling)
     logging.info("Starting Telegram bot polling...")
     thread.start()
-
     while True:
         time.sleep(10)

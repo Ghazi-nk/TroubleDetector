@@ -18,6 +18,21 @@ spec:
           image: ghcr.io/ghazi-nk/troubledetector-with-semgrep:latest
           ports:
             - containerPort: 7861
-          # command: ["/bin/bash", "-c", "while true; do sleep 3600; done"]
+          env:
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: troubledetector-secrets
+                  key: OPENAI_API_KEY
+            - name: BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: troubledetector-secrets
+                  key: BOT_TOKEN
+            - name: SEMGREP_APP_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: troubledetector-secrets
+                  key: SEMGREP_APP_TOKEN
       imagePullSecrets:
-        - name: ghcr-secret  # Das ImagePullSecret, das du vorher erstellt hast
+        - name: ghcr-secret

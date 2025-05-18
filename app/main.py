@@ -6,6 +6,18 @@ logging.basicConfig(level=logging.INFO)
 
 async def main():
     try:
+        # load reports in json and turn them into string from app/semgrep-service/reports/report.json
+
+        # create prompt using build_promt
+
+        # send prompt to openai and get response
+
+        # start the bot
+
+        # push response to telegram bot
+
+
+
         prompt = "this is a test. just say hey!"
 
         #client, model = get_openai_client()

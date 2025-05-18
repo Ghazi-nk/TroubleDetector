@@ -7,7 +7,7 @@ import telebot
 from dotenv import load_dotenv
 from telegram.constants import ParseMode
 
-from openai_client import OpenAIClient
+
 
 # Load environment variables from .env
 load_dotenv(".env")
@@ -21,7 +21,7 @@ if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY is missing from environment.")
 
 bot = telebot.TeleBot(BOT_TOKEN)
-client = OpenAIClient(api_key=OPENAI_API_KEY)
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -51,7 +51,7 @@ def handle_message(message):
     try:
         prompt, sonar_report = user_input.split("\n", 1)
         bot.send_message(chat_id, "Thinking...")
-        response = client.get_response(prompt, sonar_report)
+        response = "static response"
 
         # Escape characters for Telegram MarkdownV2
         characters_to_escape = '_>~`#+-=|{}.!'

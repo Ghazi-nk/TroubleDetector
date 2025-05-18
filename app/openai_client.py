@@ -1,37 +1,37 @@
 # openai_client.py
 
-import openai
 import os
+from openai import OpenAI
+from dotenv import load_dotenv  # Correct import for dotenv
+
+# Load environment variables from the .env file
+load_dotenv("app/.env")
 
 class OpenAIClient:
     def __init__(self, api_key=None, model="gpt-4"):
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
+        print(f"[DEBUG] Using API Key: {self.api_key}")
         if not self.api_key:
             raise ValueError("OpenAI API key must be set via argument or environment variable.")
         self.model = model
-        openai.api_key = self.api_key
+        self.client = OpenAI(api_key=self.api_key)
 
-    def get_ai_response(self, prompt: str, sonar_report: str) -> str:
-        """Combines prompt and sonar_report, sends to OpenAI API, and returns the response."""
-        full_prompt = f"{prompt}\n\nSonar Report:\n{sonar_report}"
-
+    def get_response(self, prompt: str) -> str:
+        """Sends a prompt to the OpenAI API and returns the assistant's response."""
         try:
-            response = openai.ChatCompletion.create(
+            response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[
-                    {"role": "system", "content": "You are a helpful assistant."},#todo: optimize this
-                    {"role": "user", "content": full_prompt}
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": prompt}
                 ],
                 temperature=0.7
             )
-            return response.choices[0].message["content"].strip()
+            return response.choices[0].message.content.strip()
         except Exception as e:
             return f"Error during OpenAI request: {e}"
 
 if __name__ == "__main__":
-    # For testing purposes
-    client = OpenAIClient(api_key=os.getenv("OPENAI_API_KEY"))
-    prompt = "Analyze the following sonar report."
-    sonar_report = "Sonar report data goes here."
-    response = client.get_ai_response(prompt, sonar_report)
-    print(response)
+    client = OpenAIClient()
+    test_prompt = "Summarize the main points of the Agile methodology."
+    print(client.get_response(test_prompt))

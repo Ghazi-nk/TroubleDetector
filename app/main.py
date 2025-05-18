@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO)
 async def main():
     try:
         prompt = "this is a test. just say hey!"
-        #client, model = get_openai_client()
+        client, model = get_openai_client()
         #response = get_response(prompt, client, model)
         response = "This is a mock response for testing."
         logging.info(f"OpenAI response: {response}")

@@ -87,3 +87,9 @@ kubectl create secret docker-registry ghcr-secret `
   --docker-password=$GHCRToken `
   --namespace=default
 ```
+
+how touse the pod:
+3. a Pod is created and can be accessed in k9s:
+    1. klick `s` pn the pod
+    2. `ls` to see the available folders and files in the image
+    3. `python [bazx.py](http://bazx.py)` excutes the file in the image

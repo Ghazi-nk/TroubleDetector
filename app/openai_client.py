@@ -5,7 +5,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 
 # Load environment variables from the .env file if needed
-# load_dotenv("app/.env")
+load_dotenv("/.env")
 
 def get_openai_client(api_key=None, model="gpt-4"):
     """Initializes and returns an OpenAI client instance."""

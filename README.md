@@ -77,4 +77,13 @@ get the password (user name is "admin"):
 ```bash
 [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String((kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}")))
 ```
-test
+Add secret Key to argocd:
+```powershell
+$GHCRUsername = "ghazi-nk"
+$GHCRToken = "your_personal_access_token" 
+kubectl create secret docker-registry ghcr-secret `
+  --docker-server=ghcr.io `
+  --docker-username=$GHCRUsername `
+  --docker-password=$GHCRToken `
+  --namespace=default
+```

@@ -16,30 +16,23 @@ Write only one message. No explanation.
 Example input and output below:
 
 Input JSON (shortened for brevity):
-{
-  "results": [
-    {
-      "check_id": "yaml.kubernetes.security.run-as-non-root.run-as-non-root",
-      "path": "k8s/deployment.yaml",
-      "extra": {
-        "message": "When running containers in Kubernetes, ... set runAsNonRoot to true",
-        "severity": "INFO"
-      }
-    },
-    {
-      "check_id": "yaml.kubernetes.security.allow-privilege-escalation-no-securitycontext.allow-privilege-escalation-no-securitycontext",
-      "path": "k8s/deployment.yaml",
-      "extra": {
-        "message": "To prevent privilege escalation, ... set allowPrivilegeEscalation to false",
-        "severity": "WARNING"
-      }
-    }
-  ]
-}
+[
+  {
+    "check_id": "python.lang.security.audit.formatted-sql-query.formatted-sql-query",
+    "message": "Detected possible formatted SQL query. Use parameterized queries instead.",
+    "severity": "WARNING",
+    "path": "Season-1/Level-4/code.py",
+    "line": 109,
+    "cwe": ["CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"],
+    "owasp": ["A01:2017 - Injection", "A03:2021 - Injection"]
+  }
+]
+
 Expected output:
-Ya bro... you're out here letting your containers run as root? What is this, a 2003 server? Wallah this is haram in Kubernetes.
-And not even blocking privilege escalation? Habibi, even my grandma adds securityContext these days.
-Fix it before your cluster turns into a crypto mine.
+Ya habibi... you're building SQL queries like you're making shawarma — just tossing anything in there raw.
+Wallah this formatted SQL business is how you invite the hackers to the buffet.
+CWE-89? Bro that’s like the OG SQL Injection — it’s been haram since MySpace days.
+Fix it before your database becomes public property.
 HabibiScan out. Stay safe, bro.
 
 Here’s the Semgrep report in JSON:

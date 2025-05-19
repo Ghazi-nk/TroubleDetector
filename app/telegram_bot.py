@@ -12,7 +12,7 @@ from telegram.constants import ParseMode
 
 from github_client import retrieve_repo
 from openai_client import get_openai_client, get_response
-from semgrep_client import get_semgrep_report
+from semgrep_client import get_semgrep_report, run_semgrep_scan
 
 # Load environment variables from .env
 load_dotenv(".env")
@@ -91,6 +91,7 @@ def handle_repo(repo_name, chat_id):
     # retrieve repos from github
     retrieve_repo(repo_name)
     # use semgrep to analyze the repo and generate a report
+    run_semgrep_scan()
     semgrep_report_str = get_semgrep_report()
     # create a output out of the report using openai
     client, model = get_openai_client()

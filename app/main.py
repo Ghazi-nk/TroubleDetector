@@ -4,11 +4,11 @@ import asyncio
 
 import threading
 import time
-
+from pathlib import Path
 
 from openai_client import get_openai_client, get_response
-from telegram_bot import send_message, start_polling  # You need to implement or mock this.
-from semgrep_client import get_semgrep_report  # You need to implement or mock this.
+from telegram_bot import send_message, start_polling
+from semgrep_client import get_semgrep_report
 
 logging.basicConfig(level=logging.INFO)
 
@@ -20,7 +20,7 @@ async def main():
     try:
         # Load reports in JSON and turn them into a string
 
-        semgrep_report_str = get_semgrep_report()
+        semgrep_report_str = get_semgrep_report(Path("semgrep-service/reports/report.json"))
 
         # Send prompt to OpenAI and get response
         client, model = get_openai_client()

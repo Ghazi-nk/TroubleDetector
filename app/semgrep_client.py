@@ -14,10 +14,11 @@ load_dotenv()  # Load environment variables from .env file
 def run_semgrep_scan(target_dir: str, output_path: str, semgrep_token: str = None):
     # Build the Semgrep command
     semgrep_cmd = [
-        "semgrep", "ci",
-        "--json",
-        f"--output={output_path}"
-    ]
+    "semgrep", "scan",
+    "--config", "auto",
+    "--json",
+    "--output", "reports/report.json"
+]
 
     # Set environment variables
     env = os.environ.copy()

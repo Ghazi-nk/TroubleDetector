@@ -1,41 +1,36 @@
-### Next steps:
-* (register gitlab runner in kubernetes https://docs.gitlab.com/runner/install/kubernetes/
+# TroubleDetector
+welcome to the TroubleDetector project! This project is designed to help developers identify and fix issues in their code by leveraging the power of Semgrep, OpenAI, and Telegram.
+## Goal
+The goal of this project is to create a Telegram bot that can analyze GitHub repositories for potential issues using Semgrep and provide suggestions for fixes using OpenAI's GPT-4o model. The bot will also send notifications to the user via Telegram.
 
-### Setup and start gitlab runner
-* add repo:
-```bash
-helm repo add gitlab https://charts.gitlab.io
-```
-* add values.yaml and update the values.yaml:
-  - gitlabUrl: https://gitlab.rz.htw-berlin.de/
-  - runnerRegistrationToken: <your-gitlab-runner-registration-token>
-  - rbac: { create: true }
-* start runner:
-```bash 
-helm install --generate-name -f values.yaml gitlab/gitlab-runner
-```
-
+## Features
+- Telegram bot that can receive GitHub repository names and analyze them for potential issues.
+- Integration with Semgrep to scan the code for potential issues.
+- Integration with OpenAI's GPT-4o model to provide suggestions for fixes.
+- Notifications sent to the user via Telegram.
+- GitHub Actions workflow to build and push the Docker image to GitHub Container Registry.
 
 ## 🚀 Project Flow
+### main Workflow
 
-1. **User Interaction**
-   - User sends a GitHub repository URL to the Telegram Bot.
 
-2. **Pipeline Trigger**
-   - The Telegram Bot triggers a GitLab CI/CD pipeline, passing the repository URL.
-
-3. **GitLab Pipeline Tasks**
-   - Clones the specified repository.
-   - Runs a **SonarQube** analysis using the **SonarScanner CLI**.
-   - Sends the analysis results to a running **SonarQube server**.
-   - Once the analysis is complete, the pipeline sends a request to an **AI Summary Service**.
-
-4. **AI Summary Service Tasks**
-   - Fetches the **SonarQube report**.
-   - Uses the **OpenAI API** to generate a short summary of key findings and suggestions.
-
-5. **User Notification**
-   - The **Telegram Bot** receives the summary and sends it back to the user.
+1. **github workflow**
+    - GitHub workflow is triggered by a push to the main branch.
+    - it will build the docker image and push it to the ghcr.io registry.
+    - it will also run a semgrep scan on the code and create a report.
+2. **runing main.py**
+    - the main.py file will be run in a docker container.
+    - it will use the semgrep report to create a summary of the code quality and send it to the admin user via telegram.
+   
+3. **User Interaction**
+   - Any user can send a GitHub repository name to the Telegram Bot.
+   - The bot will trigger the folowing flow:
+     1. clone repo into project folder
+     2. run semgrep scan on the project folder
+     3. create a report in the reports folder
+     4. create a summary of the report (to exception caused by big request)
+     5. get OpenAi response using the report summary and the fixed service prompt
+     6. send the response to the user via telegram
 
 #### notes:
 - min. 1 pod in argocd muss zu sehen sein (greift auf local kubernetes cluster)
@@ -43,19 +38,19 @@ helm install --generate-name -f values.yaml gitlab/gitlab-runner
 - telegram muss humorvolle message erhalten
 - renovate integration! (github) 
 - funktionsfähige pipeline (gitlab ci) und pods (argocd)
+
 #### Präsentation:
-- Krankheit -> 
-  - 2. Prüfungszeitraum
-  - einfach machen!
 - Produkt pitch (5 min)
 - Code Review (5 min)
   - Argocd
   - kubernetes
   - gitlab ci
+##### url to renovate:
+https://developer.mend.io/github/Ghazi-nk/TroubleDetector 
 
-
+---
 ### Notes:
-#### Argocd runnen:
+#### get Argocd and cluster running:
 Setup:
 1. create arcod namespace:
 ```bash
@@ -65,19 +60,19 @@ kubectl create namespace argocd
 ```bash
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
-then you can apply argocd:
+3. then you can apply argocd:
 ```bash
 kubectl apply -n argocd -f k8s/argocd-app.yaml
 ```
-then redirect the argocd server to localhost:
+4. then redirect the argocd server to localhost:
 ```bash
 kubectl port-forward svc/argocd-server -n argocd 8088:443
 ```
-get the password (user name is "admin"):
+5. get the password (user name is "admin"):
 ```bash
 [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String((kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}")))
 ```
-Add secret Key to argocd:
+6. Add secret Key to cluster:
 ```powershell
 $GHCRUsername = "ghazi-nk"
 $GHCRToken = "your_personal_access_token" 
@@ -87,13 +82,11 @@ kubectl create secret docker-registry ghcr-secret `
   --docker-password=$GHCRToken `
   --namespace=default
 ```
-
-how touse the pod:
-3. a Pod is created and can be accessed in k9s:
-    1. klick `s` pn the pod
-    2. `ls` to see the available folders and files in the image
-    3. `python [bazx.py](http://bazx.py)` excutes the file in the image
-
+7. consider adding the troubledetector-secret.yaml to the cluster:
+```bash
+kubectl apply -f k8s/troubledetector-secret.yaml
+```
+---
 #### Run semgrep-scan on docker
 pull, check the image and login to semgrep
 ```powershell

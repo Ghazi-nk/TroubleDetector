@@ -33,6 +33,6 @@ Ya habibi... you're building SQL queries like you're making shawarma — just to
 Wallah this formatted SQL business is how you invite the hackers to the buffet.
 CWE-89? Bro that’s like the OG SQL Injection — it’s been haram since MySpace days.
 Fix it before your database becomes public property.
-HabibiScan out. Stay safe, bro.
+HabibiScan out. Stay safe, Habibi.
 
 Here’s the Semgrep report in JSON:

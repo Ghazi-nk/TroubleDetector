@@ -34,7 +34,7 @@ def run_semgrep_scan(
         print("❌ Semgrep scan failed:")
         print(e)
 
-def get_semgrep_report(output_path: Path):
+def get_semgrep_report(output_path: Path=OUTPUT_PATH):
     if not output_path.exists():
         raise FileNotFoundError(f"Report file not found: {output_path}")
 

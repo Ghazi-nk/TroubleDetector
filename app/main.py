@@ -20,7 +20,7 @@ async def main():
     try:
         # Load reports in JSON and turn them into a string
 
-        semgrep_report_str = get_semgrep_report(Path("semgrep-service/reports/report.json"))
+        semgrep_report_str = get_semgrep_report(Path("app/semgrep-service/reports/report.json"))
 
         # Send prompt to OpenAI and get response
         client, model = get_openai_client()

@@ -21,7 +21,6 @@ def run_semgrep_scan(target_dir: str, output_path: str, semgrep_token: str = Non
 
     # Set environment variables
     env = os.environ.copy()
-    semgrep_token = semgrep_token or os.getenv("SEMGREP_APP_TOKEN")
 
     try:
         subprocess.run(semgrep_cmd, cwd=target_dir, check=True, env=env)

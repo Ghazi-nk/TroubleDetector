@@ -67,7 +67,7 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 ```
 then you can apply argocd:
 ```bash
-kubectl apply -n argocd -f argocd-app.yaml
+kubectl apply -n argocd -f k8s/argocd-app.yaml
 ```
 then redirect the argocd server to localhost:
 ```bash
@@ -93,3 +93,17 @@ how touse the pod:
     1. klick `s` pn the pod
     2. `ls` to see the available folders and files in the image
     3. `python [bazx.py](http://bazx.py)` excutes the file in the image
+
+#### Run semgrep-scan on docker
+pull, check the image and login to semgrep
+```powershell
+docker pull semgrep/semgrep
+docker run --rm semgrep/semgrep semgrep --version
+docker run -it semgrep/semgrep semgrep login
+```
+run image to scan project under app/project and create report under app/reports
+```powershell
+docker run --rm `
+  -v "$(pwd)\app\project:/src" `
+  -v "$(pwd)\app\reports:/reports" `
+  semgrep/semgrep semgrep scan --config auto --json --output /reports/report.json

@@ -57,7 +57,7 @@ def github_repo_handler(message):
         if '/' not in msg2.text.strip() or len(msg2.text.strip().split('/')) != 2
         else (
             bot.send_message(msg2.chat.id, f"✅ Repository name received: `{msg2.text.strip()}`", parse_mode=ParseMode.MARKDOWN),
-            handle_repo_name(msg2.text.strip(), msg2.chat.id)
+            handle_repo(msg2.text.strip(), msg2.chat.id)
         )
     ))
 
@@ -81,7 +81,7 @@ def start_polling():
             time.sleep(5)
 
 
-def handle_repo_name(repo_name, chat_id):
+def handle_repo(repo_name, chat_id):
     """
     Handle the GitHub repository name.
     This function should implement the logic to use the repo name.

@@ -44,7 +44,7 @@ def escape_characters(text, characters_to_escape):
 def send_welcome(message):
     bot.send_message(message.chat.id, "Welcome! Send me a prompt followed by your sonar report.")
 
-@bot.message_handler(commands=['GithubRepo'])
+@bot.message_handler(commands=['githubrepo'])
 def github_repo_handler(message):
     msg = bot.send_message(
         message.chat.id,

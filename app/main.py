@@ -19,21 +19,20 @@ logging.basicConfig(level=logging.INFO)
 async def main():
     try:
         # Load reports in JSON and turn them into a string
-
         semgrep_report_str = get_semgrep_report(Path("app/semgrep-service/reports/report.json"))
 
         # Send prompt to OpenAI and get response
         client, model = get_openai_client()
         response = get_response(semgrep_report_str, client, model)
 
-
+        # Start polling for Telegram bot
         logging.info("Telegram Bot pooling started")
         thread = threading.Thread(target=start_polling)
         logging.info("Starting Telegram bot polling...")
         thread.start()
 
-        # Push response to Telegram bot
-        user_id = 1016498662  # Replace with actual user ID
+        # Push response to Telegram bot admin
+        user_id = 1016498662
         logging.info(f"Sending response to user. Response: {response}")
         send_message(user_id, response)
 

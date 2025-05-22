@@ -1,8 +1,50 @@
 # TroubleDetector
 welcome to the TroubleDetector project! This project is designed to help developers identify and fix issues in their code by leveraging the power of Semgrep, OpenAI, and Telegram.
-## Goal
-The goal of this project is to create a Telegram bot that can analyze GitHub repositories for potential issues using Semgrep and provide suggestions for fixes using OpenAI's GPT-4o model. The bot will also send notifications to the user via Telegram.
 
+* Telegram bot that scans GitHub repos
+
+* Uses Semgrep for static code analysis
+
+* GPT-4o explains issues with humor + sarcasm
+
+* Sends funny + informative messages on Telegram
+## 🎯 Goal
+
+
+* Make security feedback engaging
+* Fast, no-login, no-setup tool
+* Combines dev with personality
+
+## 🤖 Sample Bot Message
+```
+Running as root? Ya habibi, that’s like giving a monkey a machine gun. This is haram. Fix it before hackers turn your app into a playground.
+```
+
+## ⚙️ How It Works
+1. User sends repo name to bot
+2. Repo cloned (github API)
+3. Semgrep runs scan 
+3. Summary created (to stay lightweight)
+4. GPT-4o generates roast + fix
+5. Bot sends response via Telegram
+
+## 🔧 Tech Stack
+* Semgrep – static analysis 
+* OpenAI GPT-4o – fix suggestions
+* Telegram Bot – main interface
+* Docker + GitHub Actions – build + scan
+* ArgoCD + K8s – deploy + manage
+* Renovate – dep updates
+
+## 🧪 CI/CD
+1. GitHub Actions builds image from current repo 
+2. runs scan semgrep scans and saves report 
+3. push image to github registry
+4. when running main.py in kubernetes  
+   -  admin User gets a summary of the report via telegram
+
+
+---
 ## Features
 - Telegram bot that can receive GitHub repository names and analyze them for potential issues.
 - Integration with Semgrep to scan the code for potential issues.

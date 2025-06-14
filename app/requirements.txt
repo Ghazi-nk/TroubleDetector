@@ -3,5 +3,5 @@ openai==1.79.0
 pyTelegramBotAPI==4.27.0
 python-dotenv==1.1.0
 python-telegram-bot==22.1
-Requests==2.32.3
+Requests==2.32.4
 semgrep==1.122.0
